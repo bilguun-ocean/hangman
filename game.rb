@@ -2,13 +2,14 @@ require_relative './main.rb'
 
 class Game
   include Tools
-  attr_reader :guess_letters, :secret_code
+  attr_reader :guess_letters, :secret_code, :correct_letters
 
-  def initialize
-    @turns = 8
-    @guess_letters = []
-    @incorrect_letters = []
-    @secret_code = generate_random_word
+  def initialize(guess_letters = [], secret_code = generate_random_word, turns = 8, incorrect_letters = [], correct_letters = [])
+    @turns = turns
+    @guess_letters = guess_letters
+    @incorrect_letters = incorrect_letters
+    @correct_letters = correct_letters
+    @secret_code = secret_code
     @game_won = false
   end
 
@@ -21,9 +22,11 @@ class Game
         end
       end
       display_clue(secret_code, guess_letters)
+      p @correct_letters
+      p @incorrect_letters
       @turns -= 1
+      check_winner
     end
-    check_winner
   end
 
 end

@@ -19,14 +19,23 @@ module Tools
       end
     end
     p clue.join(' ')
-    incorrect_letters(word, guess)
   end
   
+  def sort_correct_or_incorrect_letter(word, guess)
+    if word.include?(guess)
+      @correct_letters.push(guess)
+    else
+      @incorrect_letters.push(guess)
+    end
+    guess_letters.push(guess)
+  end
+
   def incorrect_letters(word, guess)
     incorrect_letters = []
     guess.each do |guess|
       unless word.include?(guess)
         incorrect_letters.push(guess)
+        @incorrect_letters.push(guess)
       end
     end
     puts "Incorrect letters you have chose: #{incorrect_letters.join(" ")}"
@@ -39,40 +48,31 @@ module Tools
 
   def input 
     input_letter = gets.chomp.downcase
-
-    if !(input_letter.ord.between?(97, 122))
+    if input_letter.empty?
+      puts "Please enter a value: "
+    elsif !(input_letter.ord.between?(97, 122))
       puts "Please enter a valid letter: "
     elsif input_letter.length > 1
       puts "Please enter a single letter: "
     elsif @guess_letters.include?(input_letter)
       puts "You have chosen this letter before, try another."
     else
-      @guess_letters.push(input_letter)
+      sort_correct_or_incorrect_letter(@secret_code, input_letter)
     end
   end
 
-  def validate_input(character)
-    unless (character.ord.between?(65,90)) || (character.ord.between?(97,122))
-      puts "Please enter a valid letter"
-    end
-    if character.length > 1
-      puts "Please enter a single letter"
-    elsif @guess_letters.include?(character)
-      puts "You have chose this letter before, try another letter"
-    else
-      character
-    end
-  end
 
   def how_many_turns_left
     puts "You have #{@turns} guesses left"
   end
 
-  def check_winner
-    if @game_won
-      puts "You have won the game in #{@turns} turns!"
-    else
-      puts "You have lost the game :(. The secret code was #{@secret_code}"
+  def check_winner()
+    if @secret_code.split('').uniq == @correct_letters 
+      puts "You have won the game with #{@turns} turns left!"
+      @game_won = true
+    elsif @turns == 0
+      puts "You have lost the game :("
+      puts "The answer was #{@secret_code}"
     end
   end
 end
