@@ -1,0 +1,21 @@
+---
+:turns: 1
+:guess_letters:
+- k
+- o
+- n
+- b
+- v
+- a
+- d
+:correct_letters:
+- o
+- n
+- d
+:incorrect_letters:
+- k
+- b
+- v
+- a
+:secret_code: compounds
+:game_won: 

@@ -1,0 +1,9 @@
+---
+:turns: 8
+:guess_letters: []
+:correct_letters: []
+:incorrect_letters: []
+:secret_code: 'predictions
+
+'
+:game_won: 

@@ -1,0 +1,15 @@
+---
+:turns: 4
+:guess_letters:
+- d
+- a
+- w
+- e
+:correct_letters:
+- a
+- e
+:incorrect_letters:
+- d
+- w
+:secret_code: republican
+:game_won: 

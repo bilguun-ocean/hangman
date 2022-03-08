@@ -5,7 +5,7 @@ module Tools
     dictionary = File.open('google-10000-english-no-swears.txt', 'r')
     dictionary.rewind
     characters = dictionary.readlines.select {|word| word.chomp.length >= 5 && word.chomp.length <= 12}
-    secret_word = characters.sample
+    secret_word = characters.sample.strip
   end
 
   def display_clue(word, guess)
@@ -20,6 +20,7 @@ module Tools
     end
     p clue.join(' ')
   end
+
   
   def sort_correct_or_incorrect_letter(word, guess)
     if word.include?(guess)
@@ -50,6 +51,19 @@ module Tools
     input_letter = gets.chomp.downcase
     if input_letter.empty?
       puts "Please enter a value: "
+    elsif input_letter.strip == "save"
+      print "Enter a name for your save: "
+      save_name = gets.chomp
+      save_game(save_name)
+    elsif input_letter[0..4].strip == "guess"
+      if input_letter[5..].strip == @secret_code
+        puts "You have guessed the secret code!"
+        @game_continue = true
+        @turns 
+      else
+        puts "Failed the guess. 2 turns has been subtracted as a penalty"
+        @turns -= 1
+      end
     elsif !(input_letter.ord.between?(97, 122))
       puts "Please enter a valid letter: "
     elsif input_letter.length > 1
@@ -59,20 +73,27 @@ module Tools
     else
       sort_correct_or_incorrect_letter(@secret_code, input_letter)
     end
+    end
   end
 
-
-  def how_many_turns_left
-    puts "You have #{@turns} guesses left"
-  end
 
   def check_winner()
-    if @secret_code.split('').uniq == @correct_letters 
+    if @game_continue || @secret_code.split('').uniq == @correct_letters 
       puts "You have won the game with #{@turns} turns left!"
-      @game_won = true
+      @game_continue = true
     elsif @turns == 0
       puts "You have lost the game :("
       puts "The answer was #{@secret_code}"
     end
   end
-end
+
+  def save_file_names(save_file)
+    save_file_txt = File.open('save_names.txt', 'a')
+    save_file_txt.puts save_file
+    save_file_txt.close
+  end
+
+  def display_save_files
+    save_file = File.open('save_names.txt', 'r')
+    puts save_file.readlines
+  end
